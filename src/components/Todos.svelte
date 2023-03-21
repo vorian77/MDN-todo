@@ -18,7 +18,6 @@
 
   function removeTodo(todo) {
     todos = todos.filter((t) => t.id !== todo.id)
-    todosCurrent = todos
     todosStatus.focus()  // give focus to status heading
     $alert = `Deleted todo: ${todo.name}`;
   }
@@ -46,8 +45,6 @@
       $alert = `Marked todo "${todos[i].name}" as ${todo.completed ? 'Completed' : 'Active'}`
    
     todos[i] = {...todos[i], ...todo }
-    todosCurrent = todos
-    console.log(i, todos, todosCurrent)
   }
 
   const checkAllTodos = (completed) => {
