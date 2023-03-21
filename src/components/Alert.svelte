@@ -1,23 +1,11 @@
 <script>
   import { alert } from "../stores";
   import { onDestroy } from "svelte";
-
-  let alertContent = ''
-
-  /* 
-  Whenever the value of the "alert" store changes, the callback function will be called
-  with the new value as its parmeter.
-  In the callback, the value the local variable is assigned the value we receive
-  the "subscribe" method returns a "cleanup" function, which takes care of releasing the subscription
-  */
-  const unsubscribe = alert.subscribe((value) => alertContent = value)
-
-  onDestroy(unsubscribe)
 </script>
 
-{#if alertContent}
-  <div on:click={() => alertContent = ''}>
-    <p>{ alertContent }</p>
+{#if $alert}
+  <div on:click={() => $alert = ''}>
+    <p>{ $alert }</p>
   </div>
 {/if}
 
