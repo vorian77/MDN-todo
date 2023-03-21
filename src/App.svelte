@@ -1,5 +1,7 @@
 <script>
+  import Alert from './components/Alert.svelte'
   import Todos from "./components/Todos.svelte";
+
 
   let todos = [
     { id: 1, name: "Create a Svelte starter app", completed: true },
@@ -9,4 +11,5 @@
 
 </script>
 
+<Alert />
 <Todos {todos}/>
