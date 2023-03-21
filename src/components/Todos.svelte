@@ -1,4 +1,5 @@
 <script>
+  import { alert } from "../stores.js";
   import NewTodo from "./NewTodo.svelte";
   import FilterButton from "./FilterButton.svelte";
   import TodosStatus from "./TodosStatus.svelte";
@@ -12,32 +13,53 @@
   function addTodo(name) {
     let newId = todos.length ? Math.max(...todos.map((t) => t.id)) + 1 : 1;  
     todos = [...todos, { id: newId, name, completed: false }];
+    $alert = `Added new todo: ${name}`;
   }
 
   function removeTodo(todo) {
     todos = todos.filter((t) => t.id !== todo.id)
+    todosCurrent = todos
     todosStatus.focus()  // give focus to status heading
+    $alert = `Deleted todo: ${todo.name}`;
   }
 
   // filter 
   let filter = 'all';
+  
   const filterTodos = (filter, todos) => (
     filter === 'active' ? todos.filter((t) => !t.completed) :
     filter === 'completed' ? todos.filter((t) => t.completed) :
-    todos);
+    todos
+  )
 
+  function setFilter(newFilterType) {
+    filter = newFilterType;
+    $alert = `Filter changed to: ${newFilterType}`
+  };
+  
   function updateTodo(todo) {
     const i = todos.findIndex((t) => t.id === todo.id)
+    
+    if (todos[i].name !== todo.name) 
+      $alert = `Renamed todo "${todos[i].name}" to "${todo.name}"`
+    else if (todos[i].completed !== todo.completed) 
+      $alert = `Marked todo "${todos[i].name}" as ${todo.completed ? 'Completed' : 'Active'}`
+   
     todos[i] = {...todos[i], ...todo }
+    todosCurrent = todos
+    console.log(i, todos, todosCurrent)
   }
 
   const checkAllTodos = (completed) => {
     todos = todos.map((t) => ({...t, completed }));
+    $alert = `${completed ? 'Checked' : 'Unchecked'} ${todos.length} todos.`
   }
 
-  const removeCompletedTodos = () => todos = todos.filter((t) => !t.completed);
+  const removeCompletedTodos = () => {
+    todos = todos.filter((t) => !t.completed);
+    $alert =`Removed todo ${todos.filter(t => t.completed).length} todos.`
+  }
 </script>
-
 
 <!-- Todos.svelte -->
 <div class="todoapp stack-large">
@@ -45,7 +67,7 @@
   <NewTodo on:addTodo={(e) => addTodo(e.detail)} />
 
   <!-- filter buttons -->
-  <FilterButton bind:filter />
+  <FilterButton on:filterTodos={(e) => setFilter(e.detail)} />
 
   <!-- TodosStatus -->
   <TodosStatus {todos} bind:this={todosStatus}/>

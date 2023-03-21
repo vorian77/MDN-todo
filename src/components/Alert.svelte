@@ -1,5 +1,5 @@
 <script>
-  import { alert } from "../stores";
+  import { alert } from "../stores.js";
   import { onDestroy } from "svelte";
 </script>
 
