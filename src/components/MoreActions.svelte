@@ -3,30 +3,23 @@
   const dispatch = createEventDispatcher();
 
   export let todos;
+  $: todosActive = todos.filter((t) => !t.completed).length;
+  $: todosCompleted = todos.filter((t) => t.completed).length;
 
-  let completed = true;
-
-  const checkAll = () => {
-    dispatch("checkAll", completed);
-    completed = !completed;
-  };
-
+  const setChecks = (checkAll) => dispatch("setChecks", checkAll);
   const removeCompleted = () => dispatch("removeCompleted");
-
-  $: completedTodos = todos.filter((t) => t.completed).length;
 </script>
 
 <div class="btn-group">
-  <button type="button" class="btn btn__primary" disabled={todos.length === 0} on:click={checkAll}>
+  <button type="button" class="btn btn__primary" disabled={todosActive === 0} on:click={() => setChecks(true)}>
   Check all
   </button>
   
-  <button type="button" class="btn btn__primary" disabled={todos.length === 0} on:click={checkAll}>
+  <button type="button" class="btn btn__primary" disabled={(todosCompleted === 0)} on:click={() => setChecks(false)}>
   Uncheck all
   </button>
   
-  <button type="button" class="btn btn__primary" disabled={completedTodos === 0} on:click={removeCompleted}>
+  <button type="button" class="btn btn__primary" disabled={todosCompleted === 0} on:click={removeCompleted}>
   Remove completed
   </button>
 </div>
-
