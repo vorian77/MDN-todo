@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher, tick } from "svelte";
   import { selectOnFocus } from '../actions.js'
+  
   const dispatch = createEventDispatcher();
   export let todo;
 
