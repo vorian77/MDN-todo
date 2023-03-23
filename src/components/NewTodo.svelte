@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
-  import { selectOnFocus } from '../actions.js'
+  import { selectOnFocus } from '../actions'
   const dispatch = createEventDispatcher();
 
   let name = '';
-  let nameEl;  // reference to the name input DOM node
+  let nameEl: HTMLElement;  // reference to the name input DOM node
 
   const addTodo = () => {
     dispatch('addTodo', name);

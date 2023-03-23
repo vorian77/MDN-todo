@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
+  import type { TodoType } from "../types/todo.type";
 
-  export let todos;
-  $: todosActive = todos.filter((t) => !t.completed).length;
-  $: todosCompleted = todos.filter((t) => t.completed).length;
+  export let todos: TodoType[];
+  $: todosActive = todos.filter((t: TodoType) => !t.completed).length;
+  $: todosCompleted = todos.filter((t: TodoType) => t.completed).length;
 
   const setChecks = (checkAll) => dispatch("setChecks", checkAll);
   const removeCompleted = () => dispatch("removeCompleted");

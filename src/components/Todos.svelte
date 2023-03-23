@@ -1,42 +1,44 @@
-<script>
-  import { alert } from "../stores.js";
+<script lang="ts">
+  import { alert } from "../stores";
   import NewTodo from "./NewTodo.svelte";
   import FilterButton from "./FilterButton.svelte";
   import TodosStatus from "./TodosStatus.svelte";
   import Todo from "./Todo.svelte";
   import MoreActions from "./MoreActions.svelte";
-  
-  export let todos = [];
+  import type { TodoType } from "../types/todo.type";
+  import { Filter } from "../types/filter.enum";
 
-  let todosStatus;  // reference to TodosStatus instance
+  export let todos: TodoType[] = []
+
+  let todosStatus: TodosStatus;  // reference to TodosStatus instance
   
-  function addTodo(name) {
+  function addTodo(name: string) {
     let newId = todos.length ? Math.max(...todos.map((t) => t.id)) + 1 : 1;  
     todos = [...todos, { id: newId, name, completed: false }];
     $alert = `Added new todo: ${name}.`;
   }
 
-  function removeTodo(todo) {
+  function removeTodo(todo: TodoType) {
     todos = todos.filter((t) => t.id !== todo.id)
     todosStatus.focus()  // give focus to status heading
     $alert = `Deleted todo: ${todo.name}.`;
   }
 
   // filter 
-  let filter = 'all';
+  let filter: Filter = Filter.ALL
   
-  const filterTodos = (filter, todos) => (
-    filter === 'active' ? todos.filter((t) => !t.completed) :
-    filter === 'completed' ? todos.filter((t) => t.completed) :
+  const filterTodos = (filter: Filter, todos: TodoType[]) => (
+    filter === Filter.ACTIVE ? todos.filter((t) => !t.completed) :
+    filter === Filter.COMPLETED ? todos.filter((t) => t.completed) :
     todos
   )
 
-  function setFilter(newFilterType) {
+  function setFilter(newFilterType: Filter) {
     filter = newFilterType;
     $alert = `Filter changed to: ${newFilterType}.`
   };
   
-  function updateTodo(todo) {
+  function updateTodo(todo: TodoType) {
     const i = todos.findIndex((t) => t.id === todo.id)
     
     if (todos[i].name !== todo.name) 
@@ -47,7 +49,7 @@
     todos[i] = {...todos[i], ...todo }
   }
 
-  const setChecks = (completed) => {
+  const setChecks = (completed: boolean) => {
     todos = todos.map((t) => ({...t, completed }));
     $alert = `${completed ? 'Checked' : 'Unchecked'} ${todos.length} ${todos.length === 1 ? 'todo' : 'todos'}.`
   }
@@ -71,7 +73,7 @@
   <TodosStatus {todos} bind:this={todosStatus}/>
   
   <!-- Todos -->
-  <ul role="list" class="todo-list stack-large" aria-labelledby="list-heading">
+  <ul class="todo-list stack-large" aria-labelledby="list-heading">
     {#each filterTodos(filter, todos) as todo, index (todo.id)}
       <li class="todo">
         <Todo {todo} on:update={(e) => updateTodo(e.detail)} on:remove={(e) => removeTodo(e.detail)} />

@@ -6,7 +6,7 @@
     "build": "vite build",
     "dev": "vite",
     "start": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check"
   },
   "devDependencies": {
     "@tsconfig/svelte": "^3.0.0",
@@ -14,7 +14,8 @@
     "svelte-check": "^3.0.0",
     "svelte-preprocess": "^5.0.0",
     "tslib": "^2.5.0",
-    "typescript": "^4.9.0"
+    "typescript": "^4.9.0",
+    "@rollup/plugin-typescript": "^11.0.0"
   },
   "dependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",

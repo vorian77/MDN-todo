@@ -1,18 +1,19 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher, tick } from "svelte";
-  import { selectOnFocus } from '../actions.js'
+  import { selectOnFocus } from '../actions'
+  import type { TodoType } from "../types/todo.type";
   
   const dispatch = createEventDispatcher();
-  export let todo;
+  export let todo: TodoType;
 
   let editing = false  // track editing mode
   let name = todo.name  // hold the name of the to-do being edited
-  let nameEl;  // reference to the name input DOM node
+  let nameEl: HTMLElement;  // reference to the name input DOM node
   let editButtonPressed = false;  // track if edit button has been pressed, to give focus to it after cancel or save
 
-  const focusOnInit = (node) => node && typeof node.focus === 'function' && node.focus();
+  const focusOnInit = (node: HTMLElement) => node && typeof node.focus === 'function' && node.focus();
 
-  function update(updatedTodo) {
+  function update(updatedTodo: Partial<TodoType>) {
     todo = {...todo, ...updatedTodo }  // applies modifications to todo
     dispatch('update', todo)
   }
